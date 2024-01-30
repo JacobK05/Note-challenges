@@ -8,9 +8,10 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended: true }));
 app.use(express.json());
 
-require('./apiRoutes')(app)
 
-require('./htmlRoute')(app)
+require('./Routes/apiRoutes')(app)
+
+require('./Routes/htmlRoute')(app)
 
 app.listen(PORT, () =>
   console.log(`Example app listening at http://localhost:${PORT}`)
