@@ -8,22 +8,21 @@ const uniqid = require('uniqid');
 
 
 router.get('/api/notes', (req, res) => {
- res.sendFile(path.join(__dirname, '../db/db.json'))
+   const notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf-8'))
+   res.json(notes)
 })
 
 router.post('/api/notes', (req, res) => {
 
-    
-   const stringNote = JSON.stringify(newNote);
+   const newNote = {
+   title: req.body.title,
+   text: req.body.text,
+   newNote_id: uniqid()
+   }
+   const notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf-8'))
+   notes.push(newNote)
+   fs.writeFileSync('./db/db.json', JSON.stringify(notes, null, 2))
+   res.json(newNote)
+})
 
-   fs.writeFile('./db/db.json', stringNote, (err) => {
-     if (err) {
-       console.error(err);
-       res.status(500).json({ error: 'Failed to save note' });
-     } else {
-       res.json(newNote);
-     }
-   });
- })
- 
 module.exports = router
