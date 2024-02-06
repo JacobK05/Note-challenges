@@ -6,12 +6,12 @@ const uniqid = require('uniqid');
 
 
 
-router.get('/api/notes', (req, res) => {
+router.get('/notes', (req, res) => {
    const notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf-8'));
    res.json(notes);
  });
 
-router.post('/api/notes', (req, res) => {
+router.post('/notes', (req, res) => {
 
    const newNote = {
    title: req.body.title,
@@ -25,5 +25,15 @@ router.post('/api/notes', (req, res) => {
    res.json(newNote)
    
 })
+
+router.delete('/api/notes/:id', (req, res ) => {
+const noteId = req.params.id;
+  let notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf-8'));
+  notes = notes.filter((note) => note.id !== noteId);
+  fs.writeFileSync('./db/db.json', JSON.stringify(notes, null, 2));
+  res.json({ message: 'Note deleted' });
+})
+
+
 
 module.exports = router
